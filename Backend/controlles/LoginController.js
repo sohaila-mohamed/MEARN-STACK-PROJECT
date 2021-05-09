@@ -1,4 +1,4 @@
-function AddNewUser(req, res) {
+function AddNewUser(req, res, next) {
     console.log("posting data  ", req.body);
     console.log("posting file  ", req.file);
 
@@ -12,7 +12,8 @@ function AddNewUser(req, res) {
     _std.save().then((result) => {
         res.send(result);
     }).catch((err) => {
-        console.log(err);
+        next(err);
+        for (e in err.errors) { console.log(err.errors[e].message) }
     });
 }
 

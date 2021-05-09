@@ -14,12 +14,20 @@ var corsOptions = {
 }
 const port = 3000;
 
+//static file configurations 
+const imagesPath = path.join(__dirname, './uploads/');
+app.use(express.static(path.join(__dirname, './uploads/')));
+
+
 //DB Connection 
 db = new DB();
 db.connect().then(() => { if (db.connected) return }).then(() => {
     app.listen(port, () => {
         console.log(`Server is up on port ${port} `)
     })
+}).catch((err) => {
+    console.log("error connection to DB Server", err);
+    next(err);
 });
 
 
@@ -31,6 +39,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //routers 
 app.use('/api', API_Router);
 
-//static file configurations 
-const imagesPath = path.join(__dirname, './uploads/');
-app.use(express.static(path.join(__dirname, './uploads/')));
+app.use((error, req, res, next) => {
+    console.log("error middleware", error);
+    res.send("Error  Happened");
+});

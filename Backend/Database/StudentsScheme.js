@@ -3,7 +3,7 @@ mongos.set('useCreateIndex', true);
 const StudentScheme = new mongos.Schema({
     username: {
         type: String,
-        require: true
+        required: true
     },
     age: { type: Number },
     city: {
@@ -11,14 +11,17 @@ const StudentScheme = new mongos.Schema({
     },
     email: {
         type: String,
-        unique: true
+        unique: true,
+        required: true
     },
     profileImg: {
         type: String,
-        require: true
+        required: true
     },
 
 });
+
+//convert scheme to class so we can instantiate from it 
 const Student = mongos.model("students", StudentScheme);
 
 
