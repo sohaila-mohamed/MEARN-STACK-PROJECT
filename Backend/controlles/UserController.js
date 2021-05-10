@@ -1,6 +1,6 @@
 function getAllStud(req, res) {
     console.log('req', req);
-    req.DB_Scheme.find().then((res1) => { res.send(res1) }).
+    req.DB_Scheme.Student.find().then((res1) => { res.send(res1) }).
     catch((err) => {
         console.log(err);
     })
@@ -8,7 +8,7 @@ function getAllStud(req, res) {
 
 function getUserByID(req, res) {
     console.log("params.id", req.params.id);
-    req.DB_Scheme.find({ _id: req.params.id })
+    req.DB_Scheme.Student.find({ _id: req.params.id })
         .then((result) => {
             res.send(result);
 
@@ -20,11 +20,11 @@ function getUserByID(req, res) {
 }
 
 function deleteUsrByID(request, res) {
-    Student.findOne({ _id: request.params.id })
+    req.DB_Scheme.Student.findOne({ _id: request.params.id })
         .then((result) => {
             if (result) {
                 console.log("selected object ", result);
-                Student.deleteOne({ _id: result._id })
+                req.DB_Scheme.Student.deleteOne({ _id: result._id })
                     .then((res1) => {
                         console.log(res1);
                         res.send("deleted");

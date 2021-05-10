@@ -4,6 +4,8 @@ class DB {
     constructor(config) {
         this.connected = false;
         if (!config) throw ("not valid database configurations");
+        if (!config.get('Students.dbConfig.DBConnectionString')) { console.log("not exist"); throw ("please set the env-variables first"); }
+
         this.connect = async function() {
             await mongos.connect(config.get('Students.dbConfig.DBConnectionString'), { useNewUrlParser: true, useUnifiedTopology: true }).then((res) => {
                 console.log(`in DB obj `, res);

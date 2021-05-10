@@ -8,7 +8,6 @@ const API_Router = require('./routers/ApiRouter');
 const DB = require('./Database/DBConnection');
 
 //Server Configurations 
-
 var corsOptions = {
     origin: '*',
     optionsSuccessStatus: 200
@@ -16,19 +15,22 @@ var corsOptions = {
 
 
 
-
-
-
 //DB Connection 
-db = new DB(config);
-db.connect().then(() => { if (db.connected) return }).then(() => {
-    app.listen(config.get("server.port"), () => {
-        console.log(`Server is up on port ${config.get("server.port")} `)
-    })
-}).catch((err) => {
-    console.log("error connection to DB Server", err);
-    next(err);
-});
+try {
+    db = new DB(config);
+    db.connect().then(() => { if (db.connected) return }).then(() => {
+        app.listen(config.get("server.port"), () => {
+            console.log(`Server is up on port ${config.get("server.port")} `)
+        })
+    }).catch((err) => {
+        console.log("error connection to DB Server", err);
+        next(err);
+    });
+} catch (err) {
+    console.log("Error in db connection: ", err)
+}
+
+
 
 
 //middleware
