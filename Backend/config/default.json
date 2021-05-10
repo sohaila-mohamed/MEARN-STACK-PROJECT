@@ -1,0 +1,17 @@
+{
+    "name": "Express App-Development",
+    "server": {
+        "port": 3000
+    },
+    "Students": {
+        "dbConfig": {
+            "host": "localhost",
+            "port": 27017,
+            "dbName": "test"
+        },
+        "credit": {
+            "initialLimit": 100,
+            "initialDays": 1
+        }
+    }
+}

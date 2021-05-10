@@ -1,0 +1,8 @@
+{
+    "Students": {
+        "dbConfig": {
+            "DBConnectionString": "DB_URI"
+        }
+
+    }
+}

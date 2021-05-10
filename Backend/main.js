@@ -1,3 +1,4 @@
+const config = require('config');
 const express = require('express');
 const bodyParser = require("body-parser");
 const cors = require('cors');
@@ -12,18 +13,17 @@ var corsOptions = {
     origin: '*',
     optionsSuccessStatus: 200
 }
-const port = 3000;
 
-//static file configurations 
-const imagesPath = path.join(__dirname, './uploads/');
-app.use(express.static(path.join(__dirname, './uploads/')));
+
+
+
 
 
 //DB Connection 
-db = new DB();
+db = new DB(config);
 db.connect().then(() => { if (db.connected) return }).then(() => {
-    app.listen(port, () => {
-        console.log(`Server is up on port ${port} `)
+    app.listen(config.get("server.port"), () => {
+        console.log(`Server is up on port ${config.get("server.port")} `)
     })
 }).catch((err) => {
     console.log("error connection to DB Server", err);
@@ -36,9 +36,12 @@ app.use(cors(corsOptions));
 //body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+//static files
+app.use(express.static(path.join(__dirname, './uploads/')));
 //routers 
 app.use('/api', API_Router);
 
+//error handling
 app.use((error, req, res, next) => {
     console.log("error middleware", error);
     res.send("Error  Happened");
