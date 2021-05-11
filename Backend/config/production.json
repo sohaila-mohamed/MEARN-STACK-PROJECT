@@ -1,0 +1,16 @@
+{
+    "name": "Express App-Production",
+    "server": {
+        "port": 3000
+    },
+    "Students": {
+        "dbConfig": {
+            "host": "production-server",
+            "port": 27017,
+            "dbName": "myFirstDatabase"
+        },
+        "credit": {
+            "initialDays": 30
+        }
+    }
+}
