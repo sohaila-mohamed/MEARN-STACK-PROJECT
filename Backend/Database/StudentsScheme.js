@@ -7,7 +7,7 @@ const StudentScheme = new mongos.Schema({
     username: {
         type: String,
         required: true,
-        minlength: 5,
+        minlength: 2,
         maxlength: 50
     },
     age: { type: Number, min: 10, max: 100 },
@@ -43,8 +43,9 @@ StudentScheme.methods.GenerateAuthenticationToken = function() {
 
 
 function validateUser(user) {
+    console.log("user", user)
     const schema = Joi.object({
-        username: Joi.string().min(5).max(50).required(),
+        username: Joi.string().min(2).max(50).required(),
         age: Joi.number().min(10).max(100),
         email: Joi.string().min(5).max(255).required().email(),
         profileImg: Joi.string(),

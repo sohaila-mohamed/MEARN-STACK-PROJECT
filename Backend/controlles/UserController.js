@@ -1,5 +1,5 @@
 function getAllStud(req, res) {
-    console.log('req', req);
+    console.log('Get all req', req);
     req.DB_Scheme.Student.find().then((res1) => { res.send(res1) }).
     catch((err) => {
         console.log(err);
