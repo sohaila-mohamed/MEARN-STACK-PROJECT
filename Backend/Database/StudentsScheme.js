@@ -1,5 +1,7 @@
 const mongos = require('mongoose');
 const Joi = require('joi');
+const config = require('config');
+const jwt = require('jsonwebtoken');
 mongos.set('useCreateIndex', true);
 const StudentScheme = new mongos.Schema({
     username: {
@@ -34,6 +36,12 @@ const StudentScheme = new mongos.Schema({
 
 });
 
+//for consistent authentication token generation
+StudentScheme.methods.GenerateAuthenticationToken = function() {
+    return jwt.sign({ _id: this._id }, config.get('Students.Login.JWTPrivateKey'));
+}
+
+
 function validateUser(user) {
     const schema = Joi.object({
         username: Joi.string().min(5).max(50).required(),
@@ -46,7 +54,16 @@ function validateUser(user) {
 
     return schema.validate(user);
 }
-//convert scheme to class so we can instantiate from it 
+
+LoginValidation = function(data) {
+        const schema = Joi.object({
+            email: Joi.string().min(5).max(255).required().email(),
+            password: Joi.string().min(5).max(255).required()
+        });
+
+        return schema.validate(data);
+    }
+    //convert scheme to class so we can instantiate from it 
 const Student = mongos.model("students", StudentScheme);
 
 
@@ -54,3 +71,5 @@ const Student = mongos.model("students", StudentScheme);
 module.exports.Student = Student;
 
 module.exports.validate = validateUser;
+
+module.exports.LoginValidation = LoginValidation;

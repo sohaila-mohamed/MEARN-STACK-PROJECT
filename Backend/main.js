@@ -6,6 +6,17 @@ const path = require('path');
 const app = express();
 const API_Router = require('./routers/ApiRouter');
 const DB = require('./Database/DBConnection');
+const load = require('lodash');
+
+//checking for environment variables 
+if (!config.get('Students.dbConfig.DBConnectionString')) {
+    console.log("Fatal Error, Server Can't Start");
+    process.exit(1);
+}
+if (!config.get('Students.Login.JWTPrivateKey')) {
+    console.log("Fatal Error, Server Can't Start");
+    process.exit(1);
+}
 
 //Server Configurations 
 var corsOptions = {
