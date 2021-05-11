@@ -1,43 +1,36 @@
+const _ = require('lodash');
+
 function getAllStud(req, res) {
     console.log('Get all req', req);
     req.DB_Scheme.Student.find().then((res1) => { res.send(res1) }).
     catch((err) => {
-        console.log(err);
+        next(err);
     })
 }
 
-function getUserByID(req, res) {
-    console.log("params.id", req.params.id);
-    req.DB_Scheme.Student.find({ _id: req.params.id })
-        .then((result) => {
-            res.send(result);
+async function getUserByID(req, res) {
+    //check if token matched with requested user 
+    if (req.params.id !== req.user._id) return res.status(401).send("Access denied Invalid User token");
+    //get user from db
+    let user = await req.DB_Scheme.Student.findOne({ _id: req.params.id })
+        //check if user exist or not 
+    if (!user) return res.status(404).send("Not Found Invalid ID");
+    //send response to the client 
+    return res.send(_.pick(user, ['_id', 'username', 'email', 'age', 'city', 'profileImg']));
 
-        }).catch((err) => {
-            console.log(err);
-
-        })
 
 }
 
-function deleteUsrByID(request, res) {
-    req.DB_Scheme.Student.findOne({ _id: request.params.id })
-        .then((result) => {
-            if (result) {
-                console.log("selected object ", result);
-                req.DB_Scheme.Student.deleteOne({ _id: result._id })
-                    .then((res1) => {
-                        console.log(res1);
-                        res.send("deleted");
-                    })
-                    .catch((err1) => {
-                        console.log(err1);
-                    })
+async function deleteUsrByID(req, res) {
 
-            } else res.send("Id Not Found");
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+    //check if token matched with requested user 
+    if (req.params.id !== req.user._id) return res.status(401).send("Access denied Invalid User token");
+    //check if user exist in db  
+    let user = await req.DB_Scheme.Student.findOne({ _id: req.params.id })
+    if (!user) return res.status(404).send("Not Found");
+    let result = await req.DB_Scheme.Student.deleteOne({ _id: user._id })
+    if (!result) return res.status(401).send("Error happened while deleting from db")
+    res.send(result);
 }
 module.exports = {
     getAllStud,

@@ -1,6 +1,7 @@
 const express = require('express');
 const Login_Router = express.Router();
 const multer = require('multer');
+const { Authenticate } = require('../controlles/Auth');
 const { UpdateUserData, LoginUser } = require('../controlles/LoginController');
 
 
@@ -23,6 +24,6 @@ const upload = multer({ storage: storage });
 
 Login_Router.post('/log', LoginUser);
 
-Login_Router.put('/update/:id', upload.single('profileImg'), UpdateUserData);
+Login_Router.put('/update/:id', Authenticate, upload.single('profileImg'), UpdateUserData);
 
 module.exports = Login_Router;

@@ -17,10 +17,8 @@ API_Router.use('/', (req, res, next) => {
 
 API_Router.use('/register', Register_Router);
 
-API_Router.use('login', Login_Router);
+API_Router.use('/login', Login_Router);
 
-//API_Router.use('auth', Authenticate);
-
-API_Router.use('user', Users_Router);
+API_Router.use('/user', Users_Router);
 
 module.exports = API_Router;

@@ -8,6 +8,7 @@ function Authenticate(req, res, next) {
     try {
         let decode = jwt.verify(token, config.get('Students.Login.JWTPrivateKey'));
         req.user = decode;
+        console.log("decode", decode);
         next();
     } catch (err) {
         console.log("error ", err);

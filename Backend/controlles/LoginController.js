@@ -4,25 +4,22 @@ const _ = require('lodash');
 const { LoginValidation } = require('../Database/StudentsScheme');
 
 
-function UpdateUserData(req, res) {
+async function UpdateUserData(req, res) {
     console.log("body", req.body);
-    req.DB_Scheme.Student.updateOne({ _id: req.params.id }, {
-            $set: {
-                username: req.body.username,
-                city: req.body.city,
-                age: req.body.age,
-                email: req.body.email,
-                profileImg: req.file.filename,
-                password: req.body.password
-            }
-        })
-        .then((res1) => {
-            console.log(res1);
-            res.send(res1);
-        })
-        .catch((err1) => {
-            console.log(err1);
-        })
+    if (req.user._id !== req.params.id) return res.status(401).send("Un-Authorized request");
+    let result = await req.DB_Scheme.Student.updateOne({ _id: req.params.id }, {
+        $set: {
+            username: req.body.username,
+            city: req.body.city,
+            age: req.body.age,
+            email: req.body.email,
+            profileImg: req.file.filename ? req.file.filename : "Avatar.jpg",
+            password: req.body.password
+        }
+    })
+    if (!result) return res.status(400).send("Bad Request");
+    return res.send(result);
+
 
 
 }
