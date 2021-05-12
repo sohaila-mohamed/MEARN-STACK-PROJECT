@@ -20,8 +20,6 @@ async function UpdateUserData(req, res, next) {
     if (!result) return next({ status: 400, message: "Bad Request" });
     return res.send(result);
 
-
-
 }
 
 async function LoginUser(req, res, next) {
@@ -30,7 +28,7 @@ async function LoginUser(req, res, next) {
     if (error) return next({ status: 400, message: error.details[0].message, err: error });
     //check if already registered 
     let user = await req.DB_Scheme.Student.findOne({ email: req.body.email });
-    if (!user) return next({ status: 400, message: 'Invalid email or password' })
+    if (!user) return next({ status: 400, message: 'Not registered yet' })
         //check if password validation
     const validatePassword = await bcrypt.compare(req.body.password, user.password);
     if (!validatePassword) return next({ status: 400, message: 'Invalid email or password' });
