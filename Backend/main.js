@@ -7,6 +7,7 @@ const app = express();
 const API_Router = require('./routers/ApiRouter');
 const DB = require('./Database/DBConnection');
 const load = require('lodash');
+const { ErrorHandler } = require('./middlewares/Error');
 
 //checking for environment variables 
 if (!config.get('Students.dbConfig.DBConnectionString')) {
@@ -55,7 +56,4 @@ app.use(express.static(path.join(__dirname, './uploads/')));
 app.use('/api', API_Router);
 
 //error handling
-app.use((error, req, res, next) => {
-    console.log("error middleware", error);
-    res.send("Error  Happened");
-});
+app.use(ErrorHandler);

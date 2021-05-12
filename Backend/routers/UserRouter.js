@@ -1,7 +1,7 @@
 const express = require('express');
 const Users_Router = express.Router();
 const Student = require("../Database/StudentsScheme");
-const { Authenticate } = require('../controlles/Auth');
+const { Authenticate } = require('../middlewares/Auth');
 const { getAllStud, getUserByID, deleteUsrByID } = require('../controlles/UserController');
 
 Users_Router.get('/getUsers', getAllStud);

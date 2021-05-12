@@ -1,7 +1,7 @@
 const express = require('express');
 const Login_Router = express.Router();
 const multer = require('multer');
-const { Authenticate } = require('../controlles/Auth');
+const { Authenticate } = require('../middlewares/Auth');
 const { UpdateUserData, LoginUser } = require('../controlles/LoginController');
 
 

@@ -9,7 +9,7 @@ async function AddNewUser(req, res, next) {
 
     //check if already registered 
     let user = await req.DB_Scheme.Student.findOne({ email: req.body.email });
-    if (user) return res.status(400).send('User Already registered');
+    if (user) return next({ status: 400, message: 'User Already registered' })
 
     //create new user 
     const _std = new req.DB_Scheme.Student({
@@ -28,7 +28,7 @@ async function AddNewUser(req, res, next) {
     _std.save().then((result) => {
         res.send(_.pick(result, ['_id', 'username', 'email', 'age', 'city', 'profileImg']));
     }).catch((err) => {
-        next(err);
+        next({ status: 500, message: 'Server Error', err: err })
         for (e in err.errors) { console.log(err.errors[e].message) }
     });
 }

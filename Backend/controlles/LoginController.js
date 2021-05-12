@@ -4,9 +4,9 @@ const _ = require('lodash');
 const { LoginValidation } = require('../Database/StudentsScheme');
 
 
-async function UpdateUserData(req, res) {
+async function UpdateUserData(req, res, next) {
     console.log("body", req.body);
-    if (req.user._id !== req.params.id) return res.status(401).send("Un-Authorized request");
+    if (req.user._id !== req.params.id) return next({ message: "Un-Authorized request", status: 401 });
     let result = await req.DB_Scheme.Student.updateOne({ _id: req.params.id }, {
         $set: {
             username: req.body.username,
@@ -17,7 +17,7 @@ async function UpdateUserData(req, res) {
             password: req.body.password
         }
     })
-    if (!result) return res.status(400).send("Bad Request");
+    if (!result) return next({ status: 400, message: "Bad Request" });
     return res.send(result);
 
 
@@ -27,13 +27,13 @@ async function UpdateUserData(req, res) {
 async function LoginUser(req, res, next) {
     //validate request body
     const { error } = LoginValidation(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) return next({ status: 400, message: error.details[0].message, err: error });
     //check if already registered 
     let user = await req.DB_Scheme.Student.findOne({ email: req.body.email });
-    if (!user) return res.status(400).send('Invalid email or password');
-    //check if password validation
+    if (!user) return next({ status: 400, message: 'Invalid email or password' })
+        //check if password validation
     const validatePassword = await bcrypt.compare(req.body.password, user.password);
-    if (!validatePassword) return res.status(400).send('Invalid email or password');
+    if (!validatePassword) return next({ status: 400, message: 'Invalid email or password' });
     //generate token
     const token = user.GenerateAuthenticationToken();
     //set response header with the generated token and send the response body mapped

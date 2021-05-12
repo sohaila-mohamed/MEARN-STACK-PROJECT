@@ -4,7 +4,7 @@ const Users_Router = require('./UserRouter');
 const Login_Router = require('./LoginRouter');
 const Register_Router = require('./registerRouter');
 const { Student, validate } = require("../Database/StudentsScheme");
-const { Authenticate } = require('../controlles/Auth');
+const { Authenticate } = require('../middlewares/Auth');
 
 
 API_Router.use('/', (req, res, next) => {
