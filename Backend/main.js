@@ -57,3 +57,14 @@ app.use('/api', API_Router);
 
 //error handling
 app.use(ErrorHandler);
+
+//uncaught exceptions 
+process.on('uncaughtException', (ex) => {
+    next({ status: 505, message: "internal server error", err: ex });
+    process.exit(1);
+});
+//unhandled rejections
+process.on('unhandledRejection', (ex) => {
+    next({ status: 505, message: "internal server error", err: ex });
+    process.exit(1);
+});
